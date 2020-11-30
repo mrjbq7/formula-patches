@@ -2992,7 +2992,7 @@ diff -pur a/setup.py b/setup.py
  
 +def grep_headers_for(function, headers):
 +    for header in headers:
-+        with open(header, 'r') as f:
++        with open(header, 'r', errors='surrogateescape') as f:
 +            if function in f.read():
 +                return True
 +    return False
@@ -3000,6 +3000,15 @@ diff -pur a/setup.py b/setup.py
  def find_file(filename, std_dirs, paths):
      """Searches for the directory where a given file is located,
      and returns a possibly-empty list of additional directories, or None
+@@ -1037,7 +1037,7 @@ def detect_readline_curses(self):
+             os_release = int(os.uname()[2].split('.')[0])
+             dep_target = sysconfig.get_config_var('MACOSX_DEPLOYMENT_TARGET')
+             if (dep_target and
+-                    (tuple(int(n) for n in dep_target.split('.')[0:2])
++                    (tuple(int(n) for n in str(dep_target).split('.')[0:2])
+                         < (10, 5) ) ):
+                 os_release = 8
+             if os_release < 9:
 @@ -2101,43 +2108,17 @@ class PyBuildExt(build_ext):
                             library_dirs=added_lib_dirs))
          return True
